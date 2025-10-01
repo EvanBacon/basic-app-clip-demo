@@ -1,50 +1,23 @@
-# Welcome to your Expo app 👋
+# App Clip example
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+- Uses apple-targets to setup App Clip: https://github.com/EvanBacon/expo-apple-targets
 
-## Get started
+Recreate:
 
-1. Install dependencies
+- `bunx create-expo my-app`
+- `cd my-app`
+- `bunx create-target clip`
 
-   ```bash
-   npm install
-   ```
+Issues:
 
-2. Start the app
+- Need to run `bunx expo prebuild -p ios`, open the project in Xcode, and open the signing tab to ensure signing for the App Clip bundle ID is registered before running `eas build`.
+- The version number and build number for the App Clip target must be manually kept in sync with the main app target in Xcode. This doesn't seem supported at the moment.
 
-   ```bash
-   npx expo start
-   ```
+The codesigning part requires extra requests:
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+curl 'https://developerservices2.apple.com/services/v1/bundleIds' \
+-X POST \
+-H 'Content-Type: application/vnd.api+json' \
+--data-raw '{"data":{"relationships":{"bundleIdCapabilities":{"data":[{"type":"bundleIdCapabilities","attributes":{"enabled":true,"settings":[]},"relationships":{"capability":{"data":{"type":"capabilities","id":"ON_DEMAND_INSTALL_CAPABLE"}},"parentBundleId":{"data":{"type":"bundleIds","id":"XXCCK4F8XX"}}}}]}},"attributes":{"hasExclusiveManagedCapabilities":false,"name":"XC com bacon basic-app-clip-demo clip","teamId":"XX57RJ5UXX","seedId":"XX57RJ5UXX","identifier":"com.bacon.basic-app-clip-demo.clip","bundleType":"onDemandInstallCapable"},"type":"bundleIds"}}'
+```
